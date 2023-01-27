@@ -7,7 +7,10 @@ import {
   InputRightElement,
   VStack,
 } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/react";
+import axios from "axios";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const [show, setShow] = useState(false);
@@ -16,11 +19,121 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassord, setConfirmPassord] = useState("");
-  const [pic, setPic] = useState("");
+  const [pic, setPic] = useState();
+  const [loading, setLoading] = useState(false);
+  const toast = useToast();
+  const navigate = useNavigate();
 
   const handleClick = () => setShow(!show);
 
-  const postDetails = (pic) => {};
+  const postDetails = (pics) => {
+    setLoading(true);
+    if (pics === undefined) {
+      toast({
+        title: "Please select an Image!",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
+      return;
+    }
+
+    if (pics.type === "image/jpeg" || pics.type === "image/png") {
+      const data = new FormData();
+      data.append("file", pics);
+      data.append("upload_preset", "MERN_CHAT_APP");
+      data.append("cloud_name", "tajwarsaiyeed");
+      fetch(" https://api.cloudinary.com/v1_1/tajwarsaiyeed/image/upload", {
+        method: "POST",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setPic(data.url.toString());
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+        });
+    } else {
+      toast({
+        title: "Please select an Image!",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+      return;
+    }
+  };
+
+  const submitHandler = async () => {
+    setLoading(true);
+    if (!name || !email || !password || !confirmPassord) {
+      toast({
+        title: "Please fill all the fields!",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
+      setLoading(false);
+      return;
+    } else if (password !== confirmPassord) {
+      toast({
+        title: "Password and Confirm Password must be same!",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
+      setLoading(false);
+      return;
+    } else {
+      try {
+        const config = {
+          headers: {
+            "content-type": "application/json",
+          },
+        };
+
+        const { data } = await axios.post(
+          "/api/user",
+          {
+            name,
+            email,
+            password,
+            pic,
+          },
+          config
+        );
+
+        toast({
+          title: "Registration Successful",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+          position: "top",
+        });
+
+        localStorage.setItem("userInfo", JSON.stringify(data));
+        setLoading(false);
+        navigate("/chats", { replace: true });
+      } catch (err) {
+        toast({
+          title: "Registration Failed",
+          description: err.response.data.message,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "top",
+        });
+      }
+    }
+  };
 
   return (
     <VStack spacing={`5px`}>
@@ -41,7 +154,7 @@ const SignUp = () => {
         />
       </FormControl>
       {/* password */}
-      <FormControl id="password" isRequired>
+      <FormControl id="signupPassword" isRequired>
         <FormLabel>Password</FormLabel>
         <InputGroup>
           <Input
@@ -79,7 +192,7 @@ const SignUp = () => {
           type={`file`}
           p={1.5}
           accept="image/*"
-          onChange={(e) => postDetails(e.target.value[0])}
+          onChange={(e) => postDetails(e.target.files[0])}
         />
       </FormControl>
       {/* submit button */}
@@ -92,6 +205,8 @@ const SignUp = () => {
         style={{
           marginTop: "15px",
         }}
+        onClick={submitHandler}
+        isLoading={loading}
       >
         Sign Up
       </Button>
