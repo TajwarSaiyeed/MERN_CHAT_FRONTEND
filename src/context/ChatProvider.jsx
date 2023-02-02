@@ -5,15 +5,14 @@ const CHAT_CONTEXT = createContext();
 
 const ChatProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-    console.log(userInfo);
-
+    setUser(userInfo);
     if (!userInfo || userInfo === null) {
-      return <Navigate to={"/"} />;
+      return <Navigate to={"/"} replace />;
     }
-    setUser(user);
-  }, [user]);
+  }, []);
 
   const allData = {
     user,
@@ -25,6 +24,6 @@ const ChatProvider = ({ children }) => {
   );
 };
 
-export const ChatState = () => useContext(CHAT_CONTEXT);
+export const useChatState = () => useContext(CHAT_CONTEXT);
 
 export default ChatProvider;
