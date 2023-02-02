@@ -6,17 +6,22 @@ import {
   MenuList,
   Text,
   Tooltip,
+  Avatar,
+  MenuItem,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { FcSearch } from "react-icons/fc";
 import { FaBell } from "react-icons/fa";
 import { BsChevronDown } from "react-icons/bs";
+import { useChatState } from "../../context/ChatProvider";
+import ProfileModal from "./ProfileModal";
 
 const SideDrawer = () => {
   const [search, setSearch] = useState();
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState();
+  const { user } = useChatState();
 
   return (
     <>
@@ -61,9 +66,19 @@ const SideDrawer = () => {
 
           <Menu>
             <MenuButton as={Button} rightIcon={<BsChevronDown />}>
-              {/* <Avatar /> */}
+              <Avatar
+                size="sm"
+                cursor="pointer"
+                name={user.name}
+                src={user.pic}
+              />
             </MenuButton>
-            {/* <MenuList></MenuList> */}
+            <MenuList>
+              <ProfileModal>
+                <MenuItem>My Profile</MenuItem>
+              </ProfileModal>
+              <MenuItem>LogOut</MenuItem>
+            </MenuList>
           </Menu>
         </div>
       </Box>
