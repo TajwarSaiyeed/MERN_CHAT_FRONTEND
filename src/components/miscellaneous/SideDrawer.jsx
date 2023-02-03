@@ -9,7 +9,7 @@ import {
   Avatar,
   MenuItem,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React from "react";
 import { FcSearch } from "react-icons/fc";
 import { FaBell } from "react-icons/fa";
 import { BsChevronDown } from "react-icons/bs";
@@ -17,10 +17,10 @@ import { useChatState } from "../../context/ChatProvider";
 import ProfileModal from "./ProfileModal";
 
 const SideDrawer = () => {
-  const [search, setSearch] = useState();
-  const [searchResult, setSearchResult] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [loadingChat, setLoadingChat] = useState();
+  // const [search, setSearch] = useState();
+  // const [searchResult, setSearchResult] = useState([]);
+  // const [loading, setLoading] = useState(false);
+  // const [loadingChat, setLoadingChat] = useState();
   const { user } = useChatState();
 
   return (
@@ -74,7 +74,7 @@ const SideDrawer = () => {
               />
             </MenuButton>
             <MenuList>
-              <ProfileModal>
+              <ProfileModal user={user}>
                 <MenuItem>My Profile</MenuItem>
               </ProfileModal>
               <MenuItem>LogOut</MenuItem>
