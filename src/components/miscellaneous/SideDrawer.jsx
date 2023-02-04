@@ -17,6 +17,7 @@ import {
   DrawerContent,
   useToast,
 } from "@chakra-ui/react";
+import { Spinner } from "@chakra-ui/spinner";
 import React, { useState } from "react";
 import { FcSearch } from "react-icons/fc";
 import { FaBell } from "react-icons/fa";
@@ -31,8 +32,8 @@ const SideDrawer = () => {
   const [search, setSearch] = useState();
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
-  // const [loadingChat, setLoadingChat] = useState();
-  const { user, logOut } = useChatState();
+  const [loadingChat, setLoadingChat] = useState(false);
+  const { chats, setChats, user, logOut, setSelectedChat } = useChatState();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
@@ -70,9 +71,33 @@ const SideDrawer = () => {
     }
   };
 
-  const accessChat = (id) => {};
+  const accessChat = async (userId) => {
+    try {
+      setLoadingChat(true);
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.post(`/api/chat`, { userId }, config);
 
-  console.log(searchResult, loading);
+      if (!chats?.find((c) => c?._id === data?._id)) setChats([...chats, data]);
+      setSelectedChat(data);
+    } catch (error) {
+      toast({
+        title: "Error fetching the chat!",
+        description: error.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
+    } finally {
+      onClose();
+      setLoadingChat(false);
+    }
+  };
 
   return (
     <>
@@ -158,6 +183,7 @@ const SideDrawer = () => {
               ))
             ) : null}
           </DrawerBody>
+          {loadingChat && <Spinner ml={"50%"} display="flex" />}
         </DrawerContent>
       </Drawer>
     </>
