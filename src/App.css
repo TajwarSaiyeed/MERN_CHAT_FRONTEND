@@ -7,5 +7,18 @@
     background-size: cover;
     background-repeat: no-repeat;
     background-position:center;
-    color: #000;
+    /* color: #000; */
+  }
+
+  ::-webkit-scrollbar {
+    width:0;
+  }
+
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(136, 135, 136, 0.281)
+  }
+
+  ::-webkit-slider-thumb:hover {
+    background: #555;
   }
