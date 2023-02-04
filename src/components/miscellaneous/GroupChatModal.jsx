@@ -31,6 +31,7 @@ const GroupChatModal = ({ children }) => {
   const toast = useToast();
   const { user, chats, setChats } = useChatState();
 
+  // search users
   const handleSearch = async (query) => {
     setSearch(query);
     if (!query || query.length < 1) return;
@@ -57,6 +58,8 @@ const GroupChatModal = ({ children }) => {
     }
   };
 
+  // add user to selected users
+
   const handleGroup = (userToAdd) => {
     if (selectedUsers.includes(userToAdd)) {
       toast({
@@ -71,14 +74,67 @@ const GroupChatModal = ({ children }) => {
     }
     setSelectedUsers([...selectedUsers, userToAdd]);
   };
-
-  console.log(selectedUsers);
-
+  // delete user from selected users
   const handleDelete = (userToDelete) => {
     setSelectedUsers(selectedUsers.filter((user) => user !== userToDelete));
   };
 
-  const handleSubmit = () => {};
+  // create group chat
+  const handleSubmit = async () => {
+    if (!groupChatName || !selectedUsers) {
+      toast({
+        title: "Please fill all the fields!",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+
+      const { data } = await axios.post(
+        "/api/chat/group",
+        {
+          name: groupChatName,
+          users: JSON.stringify(selectedUsers.map((u) => u._id)),
+        },
+        config
+      );
+
+      setChats([data, ...chats]);
+
+      toast({
+        title: "New Group Chat Created!",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
+    } catch (error) {
+      toast({
+        title: "Error Occured!",
+        description: error.response.data,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
+    } finally {
+      setSelectedUsers([]);
+      setSearchResult([]);
+      setGroupChatName("");
+      setLoading(false);
+      onClose();
+    }
+  };
 
   return (
     <>
