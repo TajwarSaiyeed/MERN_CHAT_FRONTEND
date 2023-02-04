@@ -39,7 +39,7 @@ const MyChats = () => {
   useEffect(() => {
     setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChats();
-    // eslint-disable-next-line no-use-before-define
+    // eslint-disable-next-line no-use-before-define, react-hooks/exhaustive-deps
   }, []);
 
   return (
