@@ -1,20 +1,28 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const CHAT_CONTEXT = createContext();
 
 const ChatProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     setUser(userInfo);
     if (!userInfo || userInfo === null) {
-      return <Navigate to={"/"} replace />;
+      return navigate("/", { replace: true });
     }
-  }, []);
+  }, [navigate]);
+
+  const logOut = () => {
+    localStorage.removeItem("userInfo");
+    setUser(null);
+    navigate("/", { replace: true });
+  };
 
   const allData = {
+    logOut,
     user,
     setUser,
   };
