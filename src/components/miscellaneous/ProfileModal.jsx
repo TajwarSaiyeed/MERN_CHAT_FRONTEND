@@ -28,7 +28,7 @@ const ProfileModal = ({ user, children }) => {
       )}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent h={"410px"}>
           <ModalHeader
             fontSize="40px"
             fontFamily="Work sans"

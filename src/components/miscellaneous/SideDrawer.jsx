@@ -13,8 +13,9 @@ import React from "react";
 import { FcSearch } from "react-icons/fc";
 import { FaBell } from "react-icons/fa";
 import { BsChevronDown } from "react-icons/bs";
-import { useChatState } from "../../context/ChatProvider";
+import { useChatState } from "../../contexts/ChatProvider";
 import ProfileModal from "./ProfileModal";
+import { useNavigate } from "react-router-dom";
 
 const SideDrawer = () => {
   // const [search, setSearch] = useState();
@@ -22,6 +23,12 @@ const SideDrawer = () => {
   // const [loading, setLoading] = useState(false);
   // const [loadingChat, setLoadingChat] = useState();
   const { user } = useChatState();
+  const navigate = useNavigate();
+
+  const logoutHandler = () => {
+    localStorage.removeItem("userInfo");
+    navigate("/");
+  };
 
   return (
     <>
@@ -77,7 +84,7 @@ const SideDrawer = () => {
               <ProfileModal user={user}>
                 <MenuItem>My Profile</MenuItem>
               </ProfileModal>
-              <MenuItem>LogOut</MenuItem>
+              <MenuItem onClick={logoutHandler}>LogOut</MenuItem>
             </MenuList>
           </Menu>
         </div>
