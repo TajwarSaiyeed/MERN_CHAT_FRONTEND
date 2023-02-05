@@ -19,6 +19,7 @@ import ScrollableChat from "./ScrollableChat";
 import io from "socket.io-client";
 
 const ENDPOINT = "http://localhost:8500";
+// eslint-disable-next-line no-unused-vars
 let socket, selectedChatCompate;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
