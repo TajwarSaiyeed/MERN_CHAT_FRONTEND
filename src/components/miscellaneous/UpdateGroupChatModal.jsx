@@ -22,7 +22,7 @@ import UserBadgeItem from "../UserAvatar/UserBadgeItem";
 import axios from "axios";
 import UserListItem from "../UserAvatar/UserListItem";
 
-const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
+const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessges }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { user, selectedChat, setSelectedChat } = useChatState();
   const [groupChatName, setGroupChatName] = useState("");
@@ -155,6 +155,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
       onClose();
       setFetchAgain(!fetchAgain);
       setLoading(false);
+      fetchMessges();
     }
   };
 

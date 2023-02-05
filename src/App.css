@@ -22,3 +22,11 @@
   ::-webkit-slider-thumb:hover {
     background: #555;
   }
+
+
+  .messages {
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    scrollbar-width: none;
+  }
