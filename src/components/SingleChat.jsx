@@ -1,13 +1,108 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useChatState } from "../context/ChatProvider";
-import { Box, IconButton, Text } from "@chakra-ui/react";
+import {
+  Box,
+  ButtonSpinner,
+  FormControl,
+  IconButton,
+  Input,
+  Spinner,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
 import { IoArrowBackOutline } from "react-icons/io5";
 import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
 import { getSender, getSenderFull } from "../config/ChatLogics";
 import ProfileModal from "./miscellaneous/ProfileModal";
+import axios from "axios";
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const { user, selectedChat, setSelectedChat } = useChatState();
+  const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [newMessage, setNewMessage] = useState("");
+  const [sendMessageLoading, setSendMessageLoading] = useState(false);
+  const toast = useToast();
+
+  useEffect(() => {
+    const fetchMessages = async () => {
+      if (!selectedChat) return;
+      try {
+        setLoading(true);
+        const config = {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        };
+
+        const { data } = await axios.get(
+          `/api/message/${selectedChat?._id}`,
+          config
+        );
+
+        setMessages(data);
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Failed to fetch messages",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMessages();
+
+    return () => {
+      fetchMessages();
+    };
+  }, [selectedChat, toast, user.token, fetchAgain]);
+
+  const sendMessage = async (e) => {
+    if (e.key === "Enter" && newMessage !== "") {
+      try {
+        setSendMessageLoading(true);
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        };
+
+        const { data } = await axios.post(
+          "/api/message",
+          {
+            chatId: selectedChat?._id,
+            content: newMessage,
+          },
+          config
+        );
+
+        setMessages([...messages, data]);
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Failed to send message",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      } finally {
+        setLoading(false);
+        setSendMessageLoading(false);
+        setNewMessage("");
+      }
+    }
+  };
+
+  const typingHandler = (e) => {
+    setNewMessage(e.target.value);
+
+    // typeing indicator logic
+  };
 
   return (
     <>
@@ -60,7 +155,42 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             borderRadius={"lg"}
             overflowY={"auto"}
           >
-            <Text>Messages</Text>
+            {loading ? (
+              <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="black"
+                size="xl"
+                alignSelf={"center"}
+                margin={"auto"}
+              />
+            ) : (
+              <div>{/* messages */}</div>
+            )}
+            <FormControl
+              display={"flex"}
+              alignItems={"center"}
+              justifyContent={"space-between"}
+              gap={2}
+              isRequired
+              mt={3}
+              transition={"all 0.3s ease"}
+              onKeyDown={sendMessage}
+            >
+              <Input
+                variant={"filled"}
+                placeholder="Enter a message..."
+                bg={"#e0e0e0"}
+                onChange={typingHandler}
+                value={newMessage}
+              />
+              {sendMessageLoading ? (
+                <IconButton>
+                  <ButtonSpinner />
+                </IconButton>
+              ) : null}
+            </FormControl>
           </Box>
         </>
       ) : (
