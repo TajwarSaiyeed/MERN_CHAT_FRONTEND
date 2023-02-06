@@ -94,8 +94,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         setMessages([...messages, newMessageRecieved]);
       }
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [messages]);
 
   const sendMessage = async (e) => {
     if (e.key === "Enter" && newMessage !== "") {
