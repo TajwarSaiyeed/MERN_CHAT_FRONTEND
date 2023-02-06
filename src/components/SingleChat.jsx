@@ -65,6 +65,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   useEffect(() => {
     fetchMessages();
     selectedChatCompare = selectedChat;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedChat]);
 
   useEffect(() => {
@@ -93,7 +94,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         setMessages([...messages, newMessageRecieved]);
       }
     });
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const sendMessage = async (e) => {
     if (e.key === "Enter" && newMessage !== "") {
@@ -227,6 +229,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
             <FormControl
               display={"flex"}
+              flexDir={"column"}
               alignItems={"center"}
               justifyContent={"space-between"}
               gap={2}
@@ -240,18 +243,27 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                   {getSender(user, selectedChat?.users)} is typing...
                 </Text>
               ) : null}
-              <Input
-                variant={"filled"}
-                placeholder="Enter a message..."
-                bg={"#e0e0e0"}
-                onChange={typingHandler}
-                value={newMessage}
-              />
-              {sendMessageLoading ? (
-                <IconButton>
-                  <ButtonSpinner />
-                </IconButton>
-              ) : null}
+              <Box
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  width: "100%",
+                }}
+              >
+                <Input
+                  variant={"filled"}
+                  placeholder="Enter a message..."
+                  bg={"#e0e0e0"}
+                  onChange={typingHandler}
+                  value={newMessage}
+                />
+                {sendMessageLoading ? (
+                  <IconButton>
+                    <ButtonSpinner />
+                  </IconButton>
+                ) : null}
+              </Box>
             </FormControl>
           </Box>
         </>
