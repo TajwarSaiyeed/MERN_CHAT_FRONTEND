@@ -12,6 +12,8 @@ frontend
 │  └─ robots.txt
 ├─ README.md
 ├─ src
+│  ├─ animations
+│  │  └─ typing.json
 │  ├─ App.css
 │  ├─ App.js
 │  ├─ background.png
@@ -20,18 +22,27 @@ frontend
 │  │  │  ├─ Login.jsx
 │  │  │  └─ SignUp.jsx
 │  │  ├─ ChatBox.jsx
+│  │  ├─ ChatLoading.jsx
 │  │  ├─ miscellaneous
+│  │  │  ├─ GroupChatModal.jsx
 │  │  │  ├─ ProfileModal.jsx
-│  │  │  └─ SideDrawer.jsx
-│  │  └─ MyChats.jsx
+│  │  │  ├─ SideDrawer.jsx
+│  │  │  └─ UpdateGroupChatModal.jsx
+│  │  ├─ MyChats.jsx
+│  │  ├─ ScrollableChat.jsx
+│  │  ├─ SingleChat.jsx
+│  │  └─ UserAvatar
+│  │     ├─ UserBadgeItem.jsx
+│  │     └─ UserListItem.jsx
+│  ├─ config
+│  │  └─ ChatLogics.js
 │  ├─ context
 │  │  └─ ChatProvider.jsx
 │  ├─ index.css
 │  ├─ index.js
-│  ├─ Pages
-│  │  ├─ ChatPage.jsx
-│  │  └─ HomePage.jsx
-│  └─ Routes
+│  └─ Pages
+│     ├─ ChatPage.jsx
+│     └─ HomePage.jsx
 └─ yarn.lock
 
 ```
