@@ -9,6 +9,7 @@ const ChatProvider = ({ children }) => {
   const [chats, setChats] = useState([]);
   const [fetchAgain, setFetchAgain] = useState(false);
   const navigate = useNavigate();
+  const [notification, setNotification] = useState([]);
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -34,6 +35,8 @@ const ChatProvider = ({ children }) => {
     setChats,
     fetchAgain,
     setFetchAgain,
+    notification,
+    setNotification,
   };
 
   return (

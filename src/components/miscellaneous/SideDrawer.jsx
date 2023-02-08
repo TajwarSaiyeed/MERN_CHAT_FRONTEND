@@ -27,13 +27,24 @@ import ProfileModal from "./ProfileModal";
 import axios from "axios";
 import ChatLoading from "../ChatLoading";
 import UserListItem from "../UserAvatar/UserListItem";
+import { getSender } from "../../config/ChatLogics";
+import NotificationBadge from "react-notification-badge";
+import { Effect } from "react-notification-badge";
 
 const SideDrawer = () => {
   const [search, setSearch] = useState();
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState(false);
-  const { chats, setChats, user, logOut, setSelectedChat } = useChatState();
+  const {
+    chats,
+    setChats,
+    user,
+    logOut,
+    setSelectedChat,
+    notification,
+    setNotification,
+  } = useChatState();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
@@ -130,6 +141,10 @@ const SideDrawer = () => {
         <div>
           <Menu>
             <MenuButton p={1}>
+              <NotificationBadge
+                count={notification?.length}
+                effect={Effect.SCALE}
+              />
               <FaBell
                 fontSize={"2xl"}
                 style={{
@@ -137,7 +152,25 @@ const SideDrawer = () => {
                 }}
               />
             </MenuButton>
-            {/* <MenuList></MenuList> */}
+            <MenuList pl={2}>
+              {!notification?.length
+                ? "No New Messages"
+                : notification?.map((n) => (
+                    <MenuItem
+                      key={n._id}
+                      onClick={() => {
+                        setSelectedChat(n.chat);
+                        setNotification(
+                          notification.filter((not) => not !== n)
+                        );
+                      }}
+                    >
+                      {n.chat.isGroupChat
+                        ? `New Message in ${n.chat.chatName}`
+                        : `New Message from ${getSender(user, n.chat.users)}`}
+                    </MenuItem>
+                  ))}
+            </MenuList>
           </Menu>
 
           <Menu>
