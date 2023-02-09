@@ -101,7 +101,7 @@ const SignUp = () => {
         };
 
         const { data } = await axios.post(
-          "/api/user",
+          "https://mern-chat-server-vf8j.onrender.com/api/user",
           {
             name,
             email,

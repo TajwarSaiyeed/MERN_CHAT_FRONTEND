@@ -22,7 +22,10 @@ const MyChats = ({ fetchAgain }) => {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.get(`/api/chat`, config);
+      const { data } = await axios.get(
+        `https://mern-chat-server-vf8j.onrender.com/api/chat`,
+        config
+      );
       setChats(data);
     } catch (error) {
       toast({

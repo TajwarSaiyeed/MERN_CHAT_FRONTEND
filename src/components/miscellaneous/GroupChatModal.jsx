@@ -42,7 +42,10 @@ const GroupChatModal = ({ children }) => {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.get(`/api/user?search=${search}`, config);
+      const { data } = await axios.get(
+        `https://mern-chat-server-vf8j.onrender.com/api/user?search=${search}`,
+        config
+      );
       setSearchResult(data);
     } catch (error) {
       toast({
@@ -101,7 +104,7 @@ const GroupChatModal = ({ children }) => {
       };
 
       const { data } = await axios.post(
-        "/api/chat/group",
+        "https://mern-chat-server-vf8j.onrender.com/api/chat/group",
         {
           name: groupChatName,
           users: JSON.stringify(selectedUsers.map((u) => u._id)),

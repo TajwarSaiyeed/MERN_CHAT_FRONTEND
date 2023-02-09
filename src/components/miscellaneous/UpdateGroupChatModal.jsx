@@ -44,7 +44,10 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessges }) => {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.get(`/api/user?search=${search}`, config);
+      const { data } = await axios.get(
+        `https://mern-chat-server-vf8j.onrender.com/api/user?search=${search}`,
+        config
+      );
       setSearchResult(data);
     } catch (error) {
       toast({
@@ -92,7 +95,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessges }) => {
         },
       };
       const { data } = await axios.put(
-        "/api/chat/groupadd",
+        "https://mern-chat-server-vf8j.onrender.com/api/chat/groupadd",
         {
           chatId: selectedChat._id,
           userId: addUser._id,
@@ -134,7 +137,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessges }) => {
         },
       };
       const { data } = await axios.put(
-        "/api/chat/groupremove",
+        "https://mern-chat-server-vf8j.onrender.com/api/chat/groupremove",
         {
           chatId: selectedChat._id,
           userId: rmUser._id,
@@ -169,7 +172,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessges }) => {
         },
       };
       const { data } = await axios.put(
-        "/api/chat/rename",
+        "https://mern-chat-server-vf8j.onrender.com/api/chat/rename",
         {
           chatId: selectedChat._id,
           chatName: groupChatName,

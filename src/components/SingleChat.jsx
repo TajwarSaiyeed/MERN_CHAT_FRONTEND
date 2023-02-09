@@ -45,7 +45,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       };
 
       const { data } = await axios.get(
-        `/api/message/${selectedChat?._id}`,
+        `https://mern-chat-server-vf8j.onrender.com/api/message/${selectedChat?._id}`,
         config
       );
 
@@ -112,7 +112,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         };
 
         const { data } = await axios.post(
-          "/api/message",
+          "https://mern-chat-server-vf8j.onrender.com/api/message",
           {
             chatId: selectedChat?._id,
             content: newMessage,
